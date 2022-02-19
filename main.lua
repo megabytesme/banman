@@ -1,3 +1,4 @@
+-- Change this to 'true' to allow guests
 local allowGuests = false
 
 function onInit()

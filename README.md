@@ -8,4 +8,4 @@ To add bans/permissions, just add the names to the appropriate file on separate 
 
 #### Commands: 
 `/kick (id)` to kick a player <br>
-`/idmatch (id)` to fetch the username of the id
+`/idmatch (id)` to fetch the username of an id

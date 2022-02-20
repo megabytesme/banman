@@ -2,7 +2,7 @@
 local allowGuests = false
 
 function onInit()
-    print("BanManager 1.3.0 Loaded")
+    print("BanManager 1.4.0 Loaded")
     MP.RegisterEvent("onPlayerAuth","playerAuthHandler")
 	MP.RegisterEvent("onChatMessage", "chatMessageHandler")
 end
@@ -30,28 +30,31 @@ end
 
 function chatMessageHandler(playerID, senderName, message)
 
+	-- Initialize files
 	local f = assert(io.open("../perms", "r"))
 	local t = f:read ("*all")
 	local f2 = assert(io.open("../banlist", "r+"))
 	local t2 = f2:read ("*all")
 
 	local permsMatch = string.match(t, senderName)
-	local getPlayerList = string.match(message, "/idmatch")
-	local msgKick = string.match(message, "/kick")
-	local msgBan = string.match(message, "/ban")
 	local msgTxt = string.match(message, "%s(.*)")
 	local msgNumR = string.match(message, "%d+")
 	local msgNum = tonumber(msgNumR)
 
+	-- Intialize commands
+	local getPlayerList = string.match(message, "/idmatch")
+	local msgKick = string.match(message, "/kick")
+	local msgBan = string.match(message, "/ban")
+	local msgBkick = string.match(message, "/bkick")
+
 	if senderName == permsMatch then
 
 		if getPlayerList then
-			local count = msgNum - 1
+			local count = 9
 			while count >= 0 do
 				local playerName = MP.GetPlayerName(count)
 				if playerName == nil then
-					local missingID = "Did not find player with ID " .. count
-					MP.SendChatMessage(playerID, missingID)
+					MP.SendChatMessage(playerID, "Did not find player with ID" .. count)
 				else
 					playerName = count .. " - " .. MP.GetPlayerName(count)
 					MP.SendChatMessage(playerID, playerName)
@@ -63,9 +66,21 @@ function chatMessageHandler(playerID, senderName, message)
 
 		if msgKick then
 			if msgNum == nil then
-				return "Invalid argument"
+				MP.SendChatMessage(playerID, "No ID given")
 			else
 				MP.DropPlayer(msgNum)
+			end
+			return -1
+		end
+
+		if msgBkick then
+			if msgNum == nil then
+				MP.SendChatMessage(playerID, "No ID given")
+			else
+				local bKickID = MP.GetPlayerName(msgNum)
+				MP.DropPlayer(msgNum)
+				f2:write("\n" .. bKickID)
+				MP.SendChatMessage(playerID, "Banned user " .. msgTxt)
 			end
 			return -1
 		end

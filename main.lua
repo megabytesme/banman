@@ -35,35 +35,46 @@ function onChatMessage(playerID, senderName, message)
 
 	local permsMatch = string.match(t, senderName)
 	local getPlayerList = string.match(message, " /idmatch")
-	local messageKick = string.match(message, " /kick")
-	local messageID = string.match(message, "%d+")
+	local msgKick = string.match(message, " /kick")
+	local msgNum = string.match(message, "%d+")
 
 	if senderName == permsMatch then
 
-		if message == messageKick then
+		--=================================--
+		if message == msgKick then
 			return true
 		end
 		if message == getPlayerList then
 			return true
 		end
+		--=================================--
 
 		if getPlayerList then
-			local playerName = GetPlayerName(messageID)
-			SendChatMessage(playerID, playerName)
+			local count = tonumber(msgNum)
+			while count >= 0 do
+				local playerName = GetPlayerName(count)
+				if playerName == nil then
+					local missingID = "Did not find player with ID " .. count
+					SendChatMessage(playerID, missingID)
+				else
+					playerName = count .. " - " .. GetPlayerName(count)
+					SendChatMessage(playerID, playerName)
+				end
+				count = count - 1
+			end
 			return -1
 		end
 
-		if messageKick then
-			if messageID == nil then
+		if msgKick then
+			if msgNum == nil then
 				return "Invalid argument"
 			else
-				DropPlayer(messageID)
-				print("Kicked player with ID " .. messageID)
+				DropPlayer(msgNum)
+				print("Kicked player with ID " .. msgNum)
 				return -1
 			end
 		end
 	end
 
 	f:close()
-
 end

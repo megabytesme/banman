@@ -1,5 +1,5 @@
 # Ban Manager
-A simple plugin for manually banning people and kicking them on your BeamMP server. Supports multiple servers with one file.
+Plugin for manually banning people and kicking them on your BeamMP server. Supports multiple servers with one file.
 
 #### Set up:
 To install just move the main.lua file into `Resources/Server/banman/`. Banlist and perms files need to be one directory up from where the BeamMP-server executable is located.

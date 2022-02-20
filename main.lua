@@ -2,7 +2,7 @@
 local allowGuests = false
 
 function onInit()
-    print("BanManager 1.2.0 Ready")
+    print("BanManager 1.2.1 Loaded")
     MP.RegisterEvent("onPlayerAuth","playerAuthHandler")
 	MP.RegisterEvent("onChatMessage", "chatMessageHandler")
 end
@@ -40,7 +40,7 @@ function chatMessageHandler(playerID, senderName, message)
 	local msgNum = tonumber(msgNumR)
 
 	if senderName == permsMatch then
-		
+
 		--=================================--
 		if message == msgKick then
 			return true

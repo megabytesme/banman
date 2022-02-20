@@ -2,9 +2,15 @@
 local allowGuests = false
 
 function onInit()
+<<<<<<< Updated upstream
     print("BanManager Ready")
     RegisterEvent("onPlayerAuth","onPlayerAuth")
 	RegisterEvent("onChatMessage", "onChatMessage")
+=======
+    print("BanManager 1.2.0 Ready")
+    MP.RegisterEvent("onPlayerAuth","playerAuthHandler")
+	MP.RegisterEvent("onChatMessage", "chatMessageHandler")
+>>>>>>> Stashed changes
 end
 
 function onPlayerAuth(name, role, isGuest)

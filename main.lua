@@ -40,6 +40,7 @@ function chatMessageHandler(playerID, senderName, message)
 	local msgNum = tonumber(msgNumR)
 
 	if senderName == permsMatch then
+		
 		--=================================--
 		if message == msgKick then
 			return true

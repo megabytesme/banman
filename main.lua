@@ -69,6 +69,7 @@ function chatMessageHandler(playerID, senderName, message)
 				MP.SendChatMessage(playerID, "No ID given")
 			else
 				MP.DropPlayer(msgNum)
+				MP.SendChatMessage(playerID, "Kicked player " .. MP.GetPlayerName(msgNum))
 			end
 			return -1
 		end

@@ -10,5 +10,5 @@ To add bans/permissions, just add the names to the appropriate file on separate 
 To kick a player <br>
 `/kick (id)` 
 
-To see usernames and ID's <br>
-`/idmatch (usercount)` 
+To see usernames and ID's (configured for 10 players)<br>
+`/idmatch` 

@@ -2,7 +2,7 @@
 local allowGuests = false
 
 function onInit()
-    print("BanManager 1.2.1 Loaded")
+    print("BanManager 1.3.0 Loaded")
     MP.RegisterEvent("onPlayerAuth","playerAuthHandler")
 	MP.RegisterEvent("onChatMessage", "chatMessageHandler")
 end
@@ -32,23 +32,18 @@ function chatMessageHandler(playerID, senderName, message)
 
 	local f = assert(io.open("../perms", "r"))
 	local t = f:read ("*all")
+	local f2 = assert(io.open("../banlist", "r+"))
+	local t2 = f2:read ("*all")
 
 	local permsMatch = string.match(t, senderName)
 	local getPlayerList = string.match(message, "/idmatch")
 	local msgKick = string.match(message, "/kick")
+	local msgBan = string.match(message, "/ban")
+	local msgTxt = string.match(message, "%s(.*)")
 	local msgNumR = string.match(message, "%d+")
 	local msgNum = tonumber(msgNumR)
 
 	if senderName == permsMatch then
-
-		--=================================--
-		if message == msgKick then
-			return true
-		end
-		if message == getPlayerList then
-			return true
-		end
-		--=================================--
 
 		if getPlayerList then
 			local count = msgNum - 1
@@ -71,11 +66,22 @@ function chatMessageHandler(playerID, senderName, message)
 				return "Invalid argument"
 			else
 				MP.DropPlayer(msgNum)
-				print("Kicked player with ID " .. msgNum)
+			end
+			return -1
+		end
+
+		if msgBan then
+			if msgTxt == nil then
+				MP.SendChatMessage(playerID, "Missing username")
+			else
+				f2:write("\n" .. msgTxt)
+				MP.SendChatMessage(playerID, "Banned user " .. msgTxt)
 			end
 			return -1
 		end
 	end
 
 	f:close()
+	f2:close()
+
 end

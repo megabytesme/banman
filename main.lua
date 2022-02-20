@@ -50,7 +50,7 @@ function chatMessageHandler(playerID, senderName, message)
 		--=================================--
 
 		if getPlayerList then
-			local count = msgNum
+			local count = msgNum - 1
 			while count >= 0 do
 				local playerName = MP.GetPlayerName(count)
 				if playerName == nil then

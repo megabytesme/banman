@@ -11,4 +11,7 @@ To kick a player <br>
 `/kick (id)` 
 
 To see usernames and ID's (configured for 10 players)<br>
-`/idmatch` 
+`/idmatch`
+
+To ban a player <br>
+`/ban (username)`

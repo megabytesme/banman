@@ -2,7 +2,7 @@
 local allowGuests = false
 
 function onInit()
-    print("BanManager 1.4.0 Loaded")
+    print("BanManager 1.3.1 Loaded")
     MP.RegisterEvent("onPlayerAuth","playerAuthHandler")
 	MP.RegisterEvent("onChatMessage", "chatMessageHandler")
 end

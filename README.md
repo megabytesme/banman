@@ -6,6 +6,9 @@ To install just move the main.lua file into `Resources/Server/banman/`. Banlist 
 
 To add bans/permissions, just add the names to the appropriate file on separate lines. The banlist and perms list are case sensitive.
 
-#### Commands: 
-`/kick (id)` to kick a player <br>
-`/idmatch (id)` to fetch the username of an id
+#### Commands:
+To kick a player <br>
+`/kick (id)` 
+
+To see usernames and ID's <br>
+`/idmatch (usercount)` 

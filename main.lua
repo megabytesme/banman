@@ -13,36 +13,38 @@ function playerAuthHandler(name, role, isGuest)
 		return "You must be signed in to join this server!"
 	end
 
-	local f = assert(io.open("../banlist", "r"))
-	local t = f:read ("*all")
+	local file = assert(io.open("../banlist", "r"))
+	local banlist = file:read ("*all")
+
+	file:close()
 	
 	print("BanManager: Checking banlist for " .. name)
 	
-	if string.match(t, name) then
+	if string.match(banlist, name) then
 		return "You have been banned from the server."
 	else
 		print("BanManager: All good, user clear to join.")
 	end
-	f:close()
 end
 
 function chatMessageHandler(playerID, senderName, message)
 
 	-- Initialize files
-	local f = assert(io.open("../perms", "r"))
-	local t = f:read ("*all")
-	local f2 = assert(io.open("../banlist", "r+"))
-	local t2 = f2:read ("*all")
+	local file = assert(io.open("../perms", "r"))
+	local perms = file:read ("*all")
+	local banlist = assert(io.open("../banlist", "a+"))
 
-	local permsMatch = string.match(t, senderName)
+	local permsMatch = string.match(perms, senderName)
 	local msgTxt = string.match(message, "%s(.*)")
 	local msgNum = tonumber(string.match(message, "%d+"))
+
+	file:close()
 
 	-- Intialize commands
 	local getPlayerList = string.match(message, "/idmatch")
 	local msgKick = string.match(message, "/kick")
 	local msgBan = string.match(message, "/ban")
-	local msgBkick = string.match(message, "/bkick")
+	local msgKban= string.match(message, "/kban")
 	local msgCountdown = string.match(message, "/countdown")
 
 	if msgCountdown then
@@ -57,12 +59,13 @@ function chatMessageHandler(playerID, senderName, message)
 	end
 
 	if senderName == permsMatch then
+		
 		if getPlayerList then
 			local i = 9
 			while i >= 0 do
 				local playerName = MP.GetPlayerName(i)
 				if playerName == nil then
-					MP.SendChatMessage(playerID, "Did not find player with ID" .. count)
+					MP.SendChatMessage(playerID, "Did not find player with ID" .. i)
 				else
 					playerName = i .. " - " .. MP.GetPlayerName(i)
 					MP.SendChatMessage(playerID, playerName)
@@ -82,14 +85,16 @@ function chatMessageHandler(playerID, senderName, message)
 			return -1
 		end
 
-		if msgBkick then
+		if msgKban then
 			if msgNum == nil then
 				MP.SendChatMessage(playerID, "No ID given")
 			else
-				local bKickID = MP.GetPlayerName(msgNum)
+				local KbanID = MP.GetPlayerName(msgNum)
+				banlist:write("\n" .. KbanID)
+				banlist:flush()
+				banlist:close()
 				MP.DropPlayer(msgNum)
-				f2:write("\n" .. bKickID)
-				MP.SendChatMessage(playerID, "Banned user " .. msgTxt)
+				MP.SendChatMessage(playerID, "Banned user " .. KbanID)
 			end
 			return -1
 		end
@@ -98,12 +103,12 @@ function chatMessageHandler(playerID, senderName, message)
 			if msgTxt == nil then
 				MP.SendChatMessage(playerID, "Missing username")
 			else
-				f2:write("\n" .. msgTxt)
+				banlist:write("\n" .. msgTxt)
+				banlist:flush()
+				banlist:close()
 				MP.SendChatMessage(playerID, "Banned user " .. msgTxt)
 			end
 			return -1
 		end
 	end
-	f:close()
-	f2:close()
 end

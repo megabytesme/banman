@@ -17,4 +17,4 @@ To ban a player <br>
 `/ban (username)`
 
 To ban and kick simultaneously <br>
-`/bkick (id)`
+`/kban (id)`

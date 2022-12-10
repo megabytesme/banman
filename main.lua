@@ -18,8 +18,15 @@ function playerAuthHandler(name, role, isGuest)
 
 	file:close()
 	
+
+    -- replace_these = {"%-"}
+    -- with_these = {"%%-"}
+    -- for i = 1, # replace_these do
+    --     name = name:gsub(replace_these[i], with_these[i])
+    -- end
+    name = name:gsub("%-", "%%-")
 	print("BanManager: Checking banlist for " .. name)
-	
+	   
 	if string.match(banlist, name) then
 		return "You have been banned from the server."
 	else

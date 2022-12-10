@@ -2,7 +2,7 @@
 local allowGuests = false
 
 function onInit()
-    print("BanManager 1.3.3 Loaded")
+    print("BanManager 1.3.4 Loaded")
     MP.RegisterEvent("onPlayerAuth","playerAuthHandler")
 	MP.RegisterEvent("onChatMessage", "chatMessageHandler")
 end
@@ -18,13 +18,14 @@ function playerAuthHandler(name, role, isGuest)
 
 	file:close()
 	
-
-    -- replace_these = {"%-"}
-    -- with_these = {"%%-"}
-    -- for i = 1, # replace_these do
-    --     name = name:gsub(replace_these[i], with_these[i])
+    -- pattern = {"%-"}
+    -- patternout = {"%%-"}
+    -- for i = 1, # pattern do
+    --     name = name:gsub(pattern[i], patternout[i])
     -- end
+
     name = name:gsub("%-", "%%-")
+	
 	print("BanManager: Checking banlist for " .. name)
 	   
 	if string.match(banlist, name) then

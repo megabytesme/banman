@@ -1,10 +1,13 @@
 -- Change this to 'true' to allow guests
 local allowGuests = false
+-- Set this to the max number of cars a player can spawn before being kicked
+local carLimit = 3 -- Factor in both vehicles and peds (as all are vehicles). 2 cars + 1 ped for example
 
 function onInit()
     print("BanManager 1.3.4 Loaded")
     MP.RegisterEvent("onPlayerAuth","playerAuthHandler")
 	MP.RegisterEvent("onChatMessage", "chatMessageHandler")
+	MP.RegisterEvent("onVehicleSpawn", "spawnLimitHandler")
 end
 
 function playerAuthHandler(name, role, isGuest)
@@ -118,5 +121,24 @@ function chatMessageHandler(playerID, senderName, message)
 			end
 			return -1
 		end
+	end
+end
+
+-- Function to check how many cars are spawned for each player. If more than carLimit then kick them.
+function spawnLimitHandler(playerID)
+	local playerVehicles = MP.GetPlayerVehicles(playerID)
+	local playerCarCount = 0
+
+	-- check if table is not nil
+	if playerVehicles ~= nil then
+		-- loop through table and count cars
+		for _ in pairs(playerVehicles) do playerCarCount = playerCarCount + 1 end
+	end
+
+	-- if player has more cars than carLimit then kick them
+	if (playerCarCount + 1) > carLimit then
+		MP.DropPlayer(playerID)
+		MP.SendChatMessage(-1, "Player " .. MP.GetPlayerName(playerID) .. " was kicked for spawning more than " .. carLimit .. " cars.")
+		print("BanManager: Player " .. MP.GetPlayerName(playerID) .. " was kicked for spawning too many cars.")
 	end
 end

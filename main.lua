@@ -3,11 +3,11 @@ local allowGuests = false
 -- Set this to the max number of cars a player can spawn before being kicked
 local carLimit = 3 -- Factor in both vehicles and peds (as all are vehicles). 2 cars + 1 ped for example
 -- Set this to the max number of player spots to be open.
-local playerLimit = 0
+local playerLimit = 10
 
 function onInit()
-    print("BanManager 1.4.1 Loaded")
-    MP.RegisterEvent("onPlayerAuth","playerAuthHandler")
+	print("BanManager 1.4.1 Loaded")
+	MP.RegisterEvent("onPlayerAuth","playerAuthHandler")
 	MP.RegisterEvent("onChatMessage", "chatMessageHandler")
 	MP.RegisterEvent("onVehicleSpawn", "spawnLimitHandler")
 end
@@ -49,26 +49,6 @@ function playerAuthHandler(name, role, isGuest)
 		print("BanManager: All good, user clear to join.")
 	end
 end
-
--- Function to check how many cars are spawned for each player. If more than carLimit then kick them.
-function spawnLimitHandler(playerID)
-	local playerVehicles = MP.GetPlayerVehicles(playerID)
-	local playerCarCount = 0
-
-	-- Check if table is not nil
-	if playerVehicles ~= nil then
-		-- Loop through table and count cars
-		for _ in pairs(playerVehicles) do playerCarCount = playerCarCount + 1 end
-	end
-
-	-- If player has more cars than carLimit then kick them
-	if (playerCarCount + 1) > carLimit then
-		MP.DropPlayer(playerID)
-		MP.SendChatMessage(-1, "Player " .. MP.GetPlayerName(playerID) .. " was kicked for spawning more than " .. carLimit .. " cars.")
-		print("BanManager: Player " .. MP.GetPlayerName(playerID) .. " was kicked for spawning too many cars.")
-	end
-end
-
 
 function chatMessageHandler(playerID, senderName, message)
 
@@ -156,3 +136,21 @@ function chatMessageHandler(playerID, senderName, message)
 	end
 end
 
+-- Function to check how many cars are spawned for each player. If more than carLimit then kick them.
+function spawnLimitHandler(playerID)
+	local playerVehicles = MP.GetPlayerVehicles(playerID)
+	local playerCarCount = 0
+
+	-- Check if table is not nil
+	if playerVehicles ~= nil then
+		-- Loop through table and count cars
+		for _ in pairs(playerVehicles) do playerCarCount = playerCarCount + 1 end
+	end
+
+	-- If player has more cars than carLimit then kick them
+	if (playerCarCount + 1) > carLimit then
+		MP.DropPlayer(playerID)
+		MP.SendChatMessage(-1, "Player " .. MP.GetPlayerName(playerID) .. " was kicked for spawning more than " .. carLimit .. " cars.")
+		print("BanManager: Player " .. MP.GetPlayerName(playerID) .. " was kicked for spawning too many cars.")
+	end
+end

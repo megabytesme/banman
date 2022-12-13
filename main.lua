@@ -19,7 +19,7 @@ function playerAuthHandler(name, role, isGuest)
 
 	local banFile = assert(io.open("../banlist", "r"))
 	local banlist = banFile:read ("*all")
-	banfile:close()
+	banFile:close()
 
 	local authFile = assert(io.open("../perms", "r"))
 	local authRead = authFile:read("*all")

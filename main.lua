@@ -1,8 +1,5 @@
--- Change this to 'true' to allow guests
 local allowGuests = false
--- Set this to the max number of cars a player can spawn before being kicked
-local carLimit = 3 -- Factor in both vehicles and peds (as all are vehicles). 2 cars + 1 ped for example
--- Set this to the max number of player spots to be open.
+local carLimit = 3
 local playerLimit = 10
 
 function onInit()
@@ -30,7 +27,6 @@ function playerAuthHandler(name, role, isGuest)
 
     pattern = {"%-"}
     patternout = {"%%-"}
-
     for i = 1, # pattern do
         name = name:gsub(pattern[i], patternout[i])
     end
@@ -70,6 +66,7 @@ function chatMessageHandler(playerID, senderName, message)
 	local msgKban = string.match(message, "/kban")
 	local msgCountdown = string.match(message, "/countdown")
 
+	-- Start parsing commands
 	if msgCountdown then
 		local i = 3
 		while i > 0 do
@@ -82,7 +79,6 @@ function chatMessageHandler(playerID, senderName, message)
 	end
 
 	if senderName == permsMatch then
-		
 		if getPlayerList then
 			local i = 9
 			while i >= 0 do
@@ -136,18 +132,15 @@ function chatMessageHandler(playerID, senderName, message)
 	end
 end
 
--- Function to check how many cars are spawned for each player. If more than carLimit then kick them.
 function spawnLimitHandler(playerID)
 	local playerVehicles = MP.GetPlayerVehicles(playerID)
 	local playerCarCount = 0
 
-	-- Check if table is not nil
+	-- Check for nil table and loop through player cars
 	if playerVehicles ~= nil then
-		-- Loop through table and count cars
 		for _ in pairs(playerVehicles) do playerCarCount = playerCarCount + 1 end
 	end
 
-	-- If player has more cars than carLimit then kick them
 	if (playerCarCount + 1) > carLimit then
 		MP.DropPlayer(playerID)
 		MP.SendChatMessage(-1, "Player " .. MP.GetPlayerName(playerID) .. " was kicked for spawning more than " .. carLimit .. " cars.")

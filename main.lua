@@ -53,7 +53,7 @@ function chatMessageHandler(playerID, senderName, message)
 	local authStore = authFile:read ("*all")
 	local banlist = assert(io.open("../banlist", "a+"))
 
-	local authMatch = string.match(file, senderName)
+	local authMatch = string.match(authStore, senderName)
 	local msgTxt = string.match(message, "%s(.*)")
 	local msgNum = tonumber(string.match(message, "%d+"))
 
